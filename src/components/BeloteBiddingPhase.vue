@@ -43,7 +43,7 @@
               v-for="(card, index) in playerHand"
               :key="index"
               class="hand-card"
-              :style="{ left: index * 60 + 'px' }"
+              :style="{ left: `calc(10% + ${index * (70 / playerHand.length)}%)` }"
           >
             <div class="card mini-card" :class="getSuitClass(card.suit)">
               <div class="card-corner top-left">
@@ -482,9 +482,10 @@ export default {
   position: relative;
   background-color: rgba(21, 87, 36, 0.5);
   border-radius: 15px;
-  padding: 20px 10px;
+  padding: 20px 30px 30px 30px;
   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
   border: 2px solid rgba(255, 213, 79, 0.3);
+  min-height: 200px;
 }
 
 .hand-label {
@@ -499,11 +500,12 @@ export default {
 .hand-cards {
   display: flex;
   justify-content: center;
-  height: 160px; /* Augmenté pour accommoder les cartes plus grandes */
+  height: 160px;
   position: relative;
   margin: 0 auto;
-  width: 85%;
+  width: 100%;
   perspective: 1000px;
+  overflow: visible;
 }
 
 .hand-card {
@@ -521,8 +523,8 @@ export default {
 }
 
 .mini-card {
-  width: 80px;
-  height: 120px;
+  width: 70px;
+  height: 110px;
   background-color: white;
   cursor: pointer;
   border-radius: 8px;
@@ -739,5 +741,4 @@ export default {
 .log-action {
   color: #e0e0e0;
 }
-
 </style>
