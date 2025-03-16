@@ -34,13 +34,8 @@
           @switch-player="onSwitchPlayer"
       />
 
-      <div class="player-controls">
-        <button class="control-button" @click="switchToNextPlayer">
-          Changer de joueur
-        </button>
-        <div class="current-player-info">
-          Joueur actuel: <span class="current-player-name">{{ players[currentPlayer].name }}</span>
-        </div>
+      <div class="current-player-info">
+        Joueur actuel: <span class="current-player-name">{{ players[currentPlayer].name }}</span>
       </div>
     </div>
   </div>
@@ -207,10 +202,7 @@ export default {
         suit: randomSuit
       }
     },
-    switchToNextPlayer() {
-      // Passer au joueur suivant manuellement
-      this.currentPlayer = (this.currentPlayer + 1) % 4
-    },
+
     onSwitchPlayer(data) {
       // Appelé depuis la phase de prise quand on passe au joueur suivant
       this.currentPlayer = data.nextPlayer
@@ -322,34 +314,16 @@ export default {
   gap: 20px;
 }
 
-.player-controls {
+.current-player-info {
   margin-top: 20px;
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
+  justify-content: center;
   padding: 15px;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
-}
-
-.control-button {
-  padding: 12px 25px;
-  border: none;
-  border-radius: 30px;
   font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: linear-gradient(45deg, #64b5f6, #0d47a1);
-  color: white;
-  box-shadow: 0 0 10px rgba(100, 181, 246, 0.5);
-}
-
-.control-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 15px rgba(100, 181, 246, 0.7);
+  color: #e0e0e0;
 }
 
 .current-player-info {
