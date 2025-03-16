@@ -28,7 +28,6 @@
             <div class="card-value">{{ trumpCard.value }}</div>
             <div class="card-suit" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</div>
           </div>
-
         </div>
       </div>
     </div>
@@ -36,9 +35,9 @@
     <div class="current-player-action">
       <div class="action-message">C'est à {{ players[currentPlayerIndex].name }} de jouer</div>
 
-      <!-- Affichage de la main du joueur actuel si c'est le joueur humain -->
-      <div class="player-hand" v-if="currentPlayerIndex === humanPlayerIndex && playerHand.length > 0">
-        <div class="hand-label">Votre main:</div>
+      <!-- Affichage de la main du joueur actuel -->
+      <div class="player-hand" v-if="playerHand.length > 0">
+        <div class="hand-label">Main de {{ players[currentPlayerIndex].name }}:</div>
         <div class="hand-cards">
           <div
               v-for="(card, index) in playerHand"
@@ -136,7 +135,7 @@ export default {
     },
     playerCards: {
       type: Array,
-      default: () => [] // Main du joueur humain
+      default: () => [] // Main du joueur actuel
     }
   },
   data() {
@@ -172,8 +171,8 @@ export default {
     }
   },
   created() {
-    // Initialiser le joueur actuel à gauche du distributeur
-    this.currentPlayerIndex = (this.dealer + 1) % 4
+    // Initialiser le joueur actuel à l'humanPlayerIndex passé en props
+    this.currentPlayerIndex = this.humanPlayerIndex
 
     // Générer une carte d'atout potentielle
     this.dealCards()
@@ -188,6 +187,12 @@ export default {
         this.playerHand = [...newCards]
       },
       deep: true
+    },
+    // Observer les changements du joueur humain
+    humanPlayerIndex: {
+      handler(newIndex) {
+        this.currentPlayerIndex = newIndex
+      }
     }
   },
   methods: {
@@ -208,7 +213,7 @@ export default {
       // Réinitialiser les données de la phase de prise
       this.biddingRound = 1
       this.actionLogs = []
-      this.currentPlayerIndex = (this.dealer + 1) % 4
+      this.currentPlayerIndex = this.humanPlayerIndex
     },
     getFullCardName(card) {
       // Retourne le nom complet de la carte (ex: "Valet de Pique")
@@ -245,11 +250,13 @@ export default {
         // Le joueur prend
         if (this.biddingRound === 1) {
           actionText = `Prend à ${this.getSuitSymbol(this.trumpCard.suit)}`
+          this.logAction(this.currentPlayerIndex, actionText)
           this.endBidding(this.currentPlayerIndex, this.trumpCard.suit)
         } else {
           // Second tour
           if (this.selectedSuit) {
             actionText = `Prend à ${this.getSuitSymbol(this.selectedSuit)}`
+            this.logAction(this.currentPlayerIndex, actionText)
             this.endBidding(this.currentPlayerIndex, this.selectedSuit)
           } else {
             // Ne devrait pas se produire grâce au bouton désactivé
@@ -272,7 +279,13 @@ export default {
     },
     nextPlayer() {
       // Passer au joueur suivant dans le sens des aiguilles d'une montre
-      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4
+      const nextPlayer = (this.currentPlayerIndex + 1) % 4
+
+      // Émettre un événement pour indiquer le changement de joueur
+      this.$emit('switch-player', { nextPlayer })
+
+      // Mettre à jour le joueur actuel
+      this.currentPlayerIndex = nextPlayer
 
       // Si on a fait un tour complet
       if (this.currentPlayerIndex === (this.dealer + 1) % 4) {
@@ -453,16 +466,6 @@ export default {
 
 .card-suit {
   font-size: 18px;
-}
-
-.card-name {
-  position: absolute;
-  bottom: 40px;
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
-  color: #000;
-  font-weight: bold;
 }
 
 .red-suit {
@@ -736,4 +739,5 @@ export default {
 .log-action {
   color: #e0e0e0;
 }
+
 </style>
