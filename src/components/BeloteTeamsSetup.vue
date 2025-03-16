@@ -178,17 +178,29 @@ export default {
   },
   methods: {
     startGame() {
-      // Pour l'instant, cette fonction ne fait rien
-      // Mais elle sera utilisée plus tard pour initialiser la partie
       console.log('Démarrage de la partie avec les équipes suivantes:')
       console.log('Équipe 1:', this.team1)
       console.log('Équipe 2:', this.team2)
 
-      // Vous pourriez émettre un événement ici
+      // Émettre un événement avec les données des équipes
       this.$emit('game-start', {
         team1: this.team1,
         team2: this.team2
       })
+
+      // Rediriger vers la page de jeu
+      // Si vous utilisez Vue Router
+      if (this.$router) {
+        this.$router.push({
+          name: 'game',
+          params: {
+            teams: JSON.stringify({
+              team1: this.team1,
+              team2: this.team2
+            })
+          }
+        })
+      }
     }
   }
 }

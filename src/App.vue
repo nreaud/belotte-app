@@ -1,22 +1,57 @@
-<script setup>
-  import StartScreen from "./components/StartScreen.vue";
-</script>
-
 <template>
-  <StartScreen/>
+  <div class="app">
+    <router-view @game-start="onGameStart" />
+  </div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<script>
+export default {
+  name: 'App',
+  methods: {
+    onGameStart(teamsData) {
+      console.log('Démarrage du jeu avec les équipes:', teamsData)
+      // La navigation est maintenant gérée dans le composant BeloteTeamsSetup
+    }
+  }
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+</script>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+body {
+  background-color: #121225;
+  background-image: linear-gradient(135deg, #121225 0%, #2d2b55 100%);
+  color: white;
+  background-attachment: fixed;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* Styles globaux pour les scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 </style>
