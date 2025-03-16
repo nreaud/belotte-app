@@ -252,7 +252,6 @@ export default {
             this.endBidding(this.currentPlayerIndex, this.selectedSuit)
           } else {
             // Ne devrait pas se produire grâce au bouton désactivé
-            return
           }
         }
       } else {
@@ -283,7 +282,6 @@ export default {
         } else {
           // Personne n'a pris au second tour, redistribuer
           this.restartBidding()
-          return
         }
       }
     },
