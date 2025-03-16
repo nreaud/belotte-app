@@ -18,14 +18,47 @@
       <div class="trump-card-label">Atout Potentiel:</div>
       <div class="trump-card">
         <div class="card">
-          <span class="card-value">{{ trumpCard.value }}</span>
-          <span class="card-suit" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</span>
+          <div class="card-corner top-left">
+            <div class="card-value">{{ trumpCard.value }}</div>
+            <div class="card-suit" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</div>
+          </div>
+          <div class="card-center" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</div>
+          <div class="card-corner bottom-right">
+            <div class="card-value">{{ trumpCard.value }}</div>
+            <div class="card-suit" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</div>
+          </div>
+          <div class="card-name">{{ getFullCardName(trumpCard) }}</div>
         </div>
       </div>
     </div>
 
     <div class="current-player-action">
       <div class="action-message">C'est à {{ players[currentPlayerIndex].name }} de jouer</div>
+
+      <!-- Affichage de la main du joueur actuel si c'est le joueur humain -->
+      <div class="player-hand" v-if="currentPlayerIndex === humanPlayerIndex && playerHand.length > 0">
+        <div class="hand-label">Votre main:</div>
+        <div class="hand-cards">
+          <div
+              v-for="(card, index) in playerHand"
+              :key="index"
+              class="hand-card"
+              :style="{ left: index * 45 + 'px' }"
+          >
+            <div class="card mini-card" :class="getSuitClass(card.suit)">
+              <div class="card-corner top-left">
+                <div class="card-value">{{ card.value }}</div>
+                <div class="card-suit" :class="getSuitClass(card.suit)">{{ getSuitSymbol(card.suit) }}</div>
+              </div>
+              <div class="card-center" :class="getSuitClass(card.suit)">{{ getSuitSymbol(card.suit) }}</div>
+              <div class="card-corner bottom-right">
+                <div class="card-value">{{ card.value }}</div>
+                <div class="card-suit" :class="getSuitClass(card.suit)">{{ getSuitSymbol(card.suit) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="action-buttons">
         <button
@@ -99,6 +132,10 @@ export default {
     humanPlayerIndex: {
       type: Number,
       default: 0 // Position du joueur humain (sud par défaut)
+    },
+    playerCards: {
+      type: Array,
+      default: () => [] // Main du joueur humain
     }
   },
   data() {
@@ -111,7 +148,8 @@ export default {
       },
       selectedSuit: null,
       actionLogs: [],
-      suits: ['hearts', 'diamonds', 'clubs', 'spades']
+      suits: ['hearts', 'diamonds', 'clubs', 'spades'],
+      playerHand: [] // Copie locale de la main du joueur
     }
   },
   computed: {
@@ -138,6 +176,18 @@ export default {
 
     // Générer une carte d'atout potentielle
     this.dealCards()
+
+    // Copier la main du joueur
+    this.playerHand = [...this.playerCards]
+  },
+  watch: {
+    // Observer les changements de la main du joueur
+    playerCards: {
+      handler(newCards) {
+        this.playerHand = [...newCards]
+      },
+      deep: true
+    }
   },
   methods: {
     dealCards() {
@@ -158,6 +208,28 @@ export default {
       this.biddingRound = 1
       this.actionLogs = []
       this.currentPlayerIndex = (this.dealer + 1) % 4
+    },
+    getFullCardName(card) {
+      // Retourne le nom complet de la carte (ex: "Valet de Pique")
+      const valueNames = {
+        '7': 'Sept',
+        '8': 'Huit',
+        '9': 'Neuf',
+        '10': 'Dix',
+        'J': 'Valet',
+        'Q': 'Dame',
+        'K': 'Roi',
+        'A': 'As'
+      }
+
+      const suitNames = {
+        'hearts': 'Cœur',
+        'diamonds': 'Carreau',
+        'clubs': 'Trèfle',
+        'spades': 'Pique'
+      }
+
+      return `${valueNames[card.value]} de ${suitNames[card.suit]}`
     },
     selectSuit(suit) {
       // Ne peut pas sélectionner la même couleur que l'atout potentiel au 2ème tour
@@ -315,31 +387,56 @@ export default {
 }
 
 .trump-card .card {
-  width: 80px;
-  height: 120px;
+  width: 100px;
+  height: 150px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.card-value {
-  font-size: 36px;
-  font-weight: bold;
+.card-corner {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-left {
   top: 5px;
-  left: 10px;
+  left: 5px;
+}
+
+.bottom-right {
+  bottom: 5px;
+  right: 5px;
+  transform: rotate(180deg);
+}
+
+.card-center {
+  font-size: 48px;
+}
+
+.card-value {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .card-suit {
-  font-size: 48px;
+  font-size: 18px;
+}
+
+.card-name {
   position: absolute;
-  bottom: 5px;
-  right: 10px;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: #000;
+  font-weight: bold;
 }
 
 .red-suit {
@@ -348,6 +445,115 @@ export default {
 
 .black-suit {
   color: #212121;
+}
+
+/* Styles pour la main du joueur */
+.player-hand {
+  margin: 20px 0 40px 0;
+  position: relative;
+  background-color: rgba(21, 87, 36, 0.5);
+  border-radius: 15px;
+  padding: 20px 10px;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 213, 79, 0.3);
+}
+
+.hand-label {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #ffd54f;
+  font-weight: bold;
+  font-size: 18px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hand-cards {
+  display: flex;
+  justify-content: center;
+  height: 160px; /* Augmenté pour accommoder les cartes plus grandes */
+  position: relative;
+  margin: 0 auto;
+  width: 85%;
+  perspective: 1000px;
+}
+
+.hand-card {
+  position: absolute;
+  transition: all 0.3s ease;
+  transform-origin: bottom center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+}
+
+.hand-card:hover {
+  transform: translateY(-30px) scale(1.1);
+  z-index: 20;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+}
+
+.mini-card {
+  width: 80px;
+  height: 120px;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.mini-card:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 50%);
+  pointer-events: none;
+}
+
+.mini-card .card-center {
+  font-size: 36px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mini-card .card-corner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mini-card .top-left {
+  top: 5px;
+  left: 5px;
+}
+
+.mini-card .bottom-right {
+  bottom: 5px;
+  right: 5px;
+  transform: rotate(180deg);
+}
+
+.mini-card .card-value {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.mini-card .card-suit {
+  font-size: 14px;
+}
+
+.mini-card.red-suit {
+  background: linear-gradient(to bottom, #ffffff, #ffeeee);
+}
+
+.mini-card.black-suit {
+  background: linear-gradient(to bottom, #ffffff, #eeeeff);
 }
 
 .current-player-action {

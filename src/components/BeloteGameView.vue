@@ -27,6 +27,7 @@
           :teams="teams"
           :dealer="dealer"
           :humanPlayerIndex="humanPlayerIndex"
+          :playerCards="playerCards"
           @bidding-complete="onBiddingComplete"
           @restart-bidding="onRestartBidding"
       />
@@ -74,7 +75,8 @@ export default {
         team1: 0,
         team2: 0
       },
-      trumpCard: null // Carte d'atout potentielle
+      trumpCard: null, // Carte d'atout potentielle
+      playerCards: [] // Main du joueur humain
     }
   },
   computed: {
@@ -109,16 +111,69 @@ export default {
       // Le joueur à gauche du distributeur commence
       this.currentPlayer = (this.dealer + 1) % 4
 
+      // Générer la main du joueur humain
+      this.dealPlayerCards()
+
       // Simuler une carte d'atout potentielle pour la phase de prise
       this.generateTrumpCard()
+    },
+    dealPlayerCards() {
+      // Simuler la distribution de 8 cartes au joueur humain
+      const values = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+      const suits = ['hearts', 'diamonds', 'clubs', 'spades']
+      const newHand = []
+
+      // Distribuer 8 cartes aléatoires
+      for (let i = 0; i < 8; i++) {
+        const randomValue = values[Math.floor(Math.random() * values.length)]
+        const randomSuit = suits[Math.floor(Math.random() * suits.length)]
+
+        // Vérifier si la carte est déjà dans la main
+        const cardExists = newHand.some(card =>
+            card.value === randomValue && card.suit === randomSuit
+        )
+
+        if (!cardExists) {
+          newHand.push({
+            value: randomValue,
+            suit: randomSuit
+          })
+        } else {
+          // Si carte déjà existante, refaire un tour de boucle
+          i--
+        }
+      }
+
+      // Trier les cartes par couleur puis par valeur
+      const suitOrder = { 'hearts': 0, 'diamonds': 1, 'clubs': 2, 'spades': 3 }
+      const valueOrder = { '7': 0, '8': 1, '9': 2, '10': 3, 'J': 4, 'Q': 5, 'K': 6, 'A': 7 }
+
+      newHand.sort((a, b) => {
+        if (a.suit !== b.suit) {
+          return suitOrder[a.suit] - suitOrder[b.suit]
+        }
+        return valueOrder[a.value] - valueOrder[b.value]
+      })
+
+      this.playerCards = newHand
     },
     generateTrumpCard() {
       // Simuler une carte d'atout potentielle
       const values = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A']
       const suits = ['hearts', 'diamonds', 'clubs', 'spades']
 
-      const randomValue = values[Math.floor(Math.random() * values.length)]
-      const randomSuit = suits[Math.floor(Math.random() * suits.length)]
+      let randomValue, randomSuit, validCard = false
+
+      // Générer une carte qui n'existe pas dans la main du joueur
+      while (!validCard) {
+        randomValue = values[Math.floor(Math.random() * values.length)]
+        randomSuit = suits[Math.floor(Math.random() * suits.length)]
+
+        // Vérifier si la carte est déjà dans la main du joueur
+        validCard = !this.playerCards.some(card =>
+            card.value === randomValue && card.suit === randomSuit
+        )
+      }
 
       this.trumpCard = {
         value: randomValue,
@@ -140,6 +195,7 @@ export default {
       setTimeout(() => {
         this.dealer = (this.dealer + 1) % 4
         this.currentPlayer = (this.dealer + 1) % 4
+        this.dealPlayerCards()
         this.generateTrumpCard()
       }, 3000)
     },
@@ -149,6 +205,9 @@ export default {
       // Mettre à jour le distributeur
       this.dealer = data.newDealer
       this.currentPlayer = (this.dealer + 1) % 4
+
+      // Redistribuer les cartes au joueur
+      this.dealPlayerCards()
 
       // Générer une nouvelle carte d'atout
       this.generateTrumpCard()
