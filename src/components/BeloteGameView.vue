@@ -118,13 +118,13 @@ export default {
       this.generateTrumpCard()
     },
     dealPlayerCards() {
-      // Simuler la distribution de 8 cartes au joueur humain
+      // Simuler la distribution de 5 cartes au joueur humain (phase de prise en belote)
       const values = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A']
       const suits = ['hearts', 'diamonds', 'clubs', 'spades']
       const newHand = []
 
-      // Distribuer 8 cartes aléatoires
-      for (let i = 0; i < 8; i++) {
+      // Distribuer 5 cartes aléatoires
+      for (let i = 0; i < 5; i++) {
         const randomValue = values[Math.floor(Math.random() * values.length)]
         const randomSuit = suits[Math.floor(Math.random() * suits.length)]
 

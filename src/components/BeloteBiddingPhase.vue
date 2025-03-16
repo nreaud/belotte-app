@@ -43,7 +43,7 @@
               v-for="(card, index) in playerHand"
               :key="index"
               class="hand-card"
-              :style="{ left: index * 45 + 'px' }"
+              :style="{ left: index * 60 + 'px' }"
           >
             <div class="card mini-card" :class="getSuitClass(card.suit)">
               <div class="card-corner top-left">
