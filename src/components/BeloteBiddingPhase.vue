@@ -258,13 +258,14 @@ export default {
 
 <style scoped>
 .bidding-phase {
-  max-width: 600px;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 15px;
   color: white;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
 }
 
 .phase-title {
@@ -503,5 +504,4 @@ export default {
 .log-action {
   color: #e0e0e0;
 }
-
 </style>

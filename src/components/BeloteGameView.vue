@@ -14,21 +14,23 @@
       </div>
     </div>
 
-    <BeloteGameTable
-        :teams="teams"
-        :dealer="dealer"
-        :currentPlayer="currentPlayer"
-        :centerCard="trumpCardForTable"
-    />
+    <div class="game-content">
+      <BeloteGameTable
+          :teams="teams"
+          :dealer="dealer"
+          :currentPlayer="currentPlayer"
+          :centerCard="trumpCardForTable"
+      />
 
-    <BeloteBiddingPhase
-        v-if="gamePhase === 'bidding'"
-        :teams="teams"
-        :dealer="dealer"
-        :humanPlayerIndex="humanPlayerIndex"
-        @bidding-complete="onBiddingComplete"
-        @restart-bidding="onRestartBidding"
-    />
+      <BeloteBiddingPhase
+          v-if="gamePhase === 'bidding'"
+          :teams="teams"
+          :dealer="dealer"
+          :humanPlayerIndex="humanPlayerIndex"
+          @bidding-complete="onBiddingComplete"
+          @restart-bidding="onRestartBidding"
+      />
+    </div>
   </div>
 </template>
 
@@ -52,12 +54,12 @@ export default {
     return {
       teams: this.initialTeams || {
         team1: {
-          name: 'Les Cœurs',
+          name: 'Nous',
           player1: 'Joueur 1',
           player2: 'Joueur 2'
         },
         team2: {
-          name: 'Les Piques',
+          name: 'Eux',
           player1: 'Joueur 3',
           player2: 'Joueur 4'
         }
@@ -171,7 +173,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -217,6 +219,29 @@ export default {
 .score-value {
   font-size: 24px;
   font-weight: bold;
+}
+
+.game-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Sur les écrans larges, afficher les composants côte à côte */
+@media (min-width: 1200px) {
+  .game-content {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
+  /* Limiter la taille des composants pour éviter tout chevauchement */
+  .game-content > * {
+    flex: 0 0 48%; /* Chaque composant prend 48% de la largeur */
+    max-width: 48%;
+  }
 }
 
 @media (max-width: 768px) {

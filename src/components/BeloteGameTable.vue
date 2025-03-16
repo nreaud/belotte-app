@@ -136,21 +136,23 @@ export default {
 
 <style scoped>
 .game-table {
-  margin-bottom: 30px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .table-container {
   position: relative;
   width: 100%;
-  max-width: 500px;
-  height: 500px;
+  height: 0;
+  padding-bottom: 100%; /* Crée un rapport d'aspect carré */
+  max-width: 450px;
   margin: 0 auto;
 }
 
 .table-border {
   position: absolute;
-  width: 320px;
-  height: 320px;
+  width: 80%;
+  height: 80%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -163,8 +165,8 @@ export default {
 }
 
 .table {
-  width: 280px;
-  height: 280px;
+  width: 90%;
+  height: 90%;
   border-radius: 50%;
   background-color: #1a633a;
   box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.5);
@@ -177,8 +179,8 @@ export default {
 .table:before {
   content: '';
   position: absolute;
-  width: 240px;
-  height: 240px;
+  width: 85%;
+  height: 85%;
   border-radius: 50%;
   border: 2px dashed rgba(255, 255, 255, 0.2);
 }
@@ -232,7 +234,7 @@ export default {
 /* Positionnement des joueurs */
 .player {
   position: absolute;
-  width: 120px;
+  width: 30%;
   display: flex;
   justify-content: center;
   transition: transform 0.3s ease;
