@@ -14,10 +14,11 @@
       </div>
     </div>
 
-    <div class="trump-card-container" v-if="trumpCard">
-      <div class="trump-card-label">Atout Potentiel:</div>
+    <!-- carte d'atout -->
+    <div class="trump-card-container">
+      <div class="trump-card-label">Carte d'atout potentiel:</div>
       <div class="trump-card">
-        <div class="card">
+        <div class="card" :class="getSuitClass(trumpCard.suit)">
           <div class="card-corner top-left">
             <div class="card-value">{{ trumpCard.value }}</div>
             <div class="card-suit" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</div>
@@ -371,29 +372,52 @@ export default {
   color: #ffd54f;
 }
 
+/* Styles pour la carte d'atout */
 .trump-card-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 25px;
+  margin: 20px 0;
+  padding: 15px;
+  background-color: rgba(30, 30, 60, 0.5);
+  border-radius: 10px;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4);
 }
 
 .trump-card-label {
-  margin-bottom: 10px;
-  font-size: 16px;
-  color: #bdbdbd;
+  text-align: center;
+  margin-bottom: 15px;
+  color: #ffd54f;
+  font-weight: bold;
+  font-size: 18px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.trump-card .card {
-  width: 100px;
-  height: 150px;
+.trump-card {
+  perspective: 1000px;
+}
+
+.card {
+  width: 120px;
+  height: 180px;
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.card:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 50%);
+  border-radius: 10px;
+  pointer-events: none;
 }
 
 .card-corner {
@@ -416,6 +440,10 @@ export default {
 
 .card-center {
   font-size: 48px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .card-value {
