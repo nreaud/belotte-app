@@ -1,71 +1,67 @@
 <template>
   <div class="game-table">
     <div class="table-container">
-      <div class="table">
-        <!-- Position Nord -->
-        <div class="player-position north">
-          <div class="player-avatar" :class="{'active': currentPlayer === playerPositions.north}">
-            <div class="player-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="8" r="5"></circle>
-                <path d="M20 21v-2a7 7 0 0 0-14 0v2"></path>
-              </svg>
-            </div>
-            <div class="player-name">{{ players[playerPositions.north].name }}</div>
-            <div class="team-indicator" :class="getTeamClass(playerPositions.north)"></div>
-          </div>
-        </div>
-
-        <!-- Position Ouest -->
-        <div class="player-position west">
-          <div class="player-avatar" :class="{'active': currentPlayer === playerPositions.west}">
-            <div class="player-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="8" r="5"></circle>
-                <path d="M20 21v-2a7 7 0 0 0-14 0v2"></path>
-              </svg>
-            </div>
-            <div class="player-name">{{ players[playerPositions.west].name }}</div>
-            <div class="team-indicator" :class="getTeamClass(playerPositions.west)"></div>
-          </div>
-        </div>
-
-        <!-- Centre de la table -->
-        <div class="table-center">
-          <div v-if="centerCard" class="center-card">
-            <div class="card">
-              <span class="card-value">{{ centerCard.value }}</span>
-              <span class="card-suit" :class="getSuitClass(centerCard.suit)">{{ getSuitSymbol(centerCard.suit) }}</span>
+      <!-- Table ronde avec bordure -->
+      <div class="table-border">
+        <div class="table">
+          <!-- Centre de la table -->
+          <div class="table-center">
+            <div v-if="centerCard" class="center-card">
+              <div class="card">
+                <span class="card-value">{{ centerCard.value }}</span>
+                <span class="card-suit" :class="getSuitClass(centerCard.suit)">{{ getSuitSymbol(centerCard.suit) }}</span>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Position Est -->
-        <div class="player-position east">
-          <div class="player-avatar" :class="{'active': currentPlayer === playerPositions.east}">
-            <div class="player-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="8" r="5"></circle>
-                <path d="M20 21v-2a7 7 0 0 0-14 0v2"></path>
-              </svg>
-            </div>
-            <div class="player-name">{{ players[playerPositions.east].name }}</div>
-            <div class="team-indicator" :class="getTeamClass(playerPositions.east)"></div>
+      <!-- Joueurs positionnés autour de la table -->
+      <div class="player north" :class="{'active': currentPlayer === playerPositions.north}">
+        <div class="player-avatar" :class="getTeamClass(playerPositions.north)">
+          <div class="player-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="5"></circle>
+              <path d="M20 21v-2a7 7 0 0 0-14 0v2"></path>
+            </svg>
           </div>
+          <div class="player-name">{{ players[playerPositions.north].name }}</div>
         </div>
+      </div>
 
-        <!-- Position Sud -->
-        <div class="player-position south">
-          <div class="player-avatar" :class="{'active': currentPlayer === playerPositions.south}">
-            <div class="player-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="8" r="5"></circle>
-                <path d="M20 21v-2a7 7 0 0 0-14 0v2"></path>
-              </svg>
-            </div>
-            <div class="player-name">{{ players[playerPositions.south].name }}</div>
-            <div class="team-indicator" :class="getTeamClass(playerPositions.south)"></div>
+      <div class="player east" :class="{'active': currentPlayer === playerPositions.east}">
+        <div class="player-avatar" :class="getTeamClass(playerPositions.east)">
+          <div class="player-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="5"></circle>
+              <path d="M20 21v-2a7 7 0 0 0-14 0v2"></path>
+            </svg>
           </div>
+          <div class="player-name">{{ players[playerPositions.east].name }}</div>
+        </div>
+      </div>
+
+      <div class="player south" :class="{'active': currentPlayer === playerPositions.south}">
+        <div class="player-avatar" :class="getTeamClass(playerPositions.south)">
+          <div class="player-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="5"></circle>
+              <path d="M20 21v-2a7 7 0 0 0-14 0v2"></path>
+            </svg>
+          </div>
+          <div class="player-name">{{ players[playerPositions.south].name }}</div>
+        </div>
+      </div>
+
+      <div class="player west" :class="{'active': currentPlayer === playerPositions.west}">
+        <div class="player-avatar" :class="getTeamClass(playerPositions.west)">
+          <div class="player-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="5"></circle>
+              <path d="M20 21v-2a7 7 0 0 0-14 0v2"></path>
+            </svg>
+          </div>
+          <div class="player-name">{{ players[playerPositions.west].name }}</div>
         </div>
       </div>
     </div>
@@ -140,132 +136,55 @@ export default {
 
 <style scoped>
 .game-table {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .table-container {
   position: relative;
   width: 100%;
-  max-width: 600px;
-  height: 400px;
+  max-width: 500px;
+  height: 500px;
   margin: 0 auto;
 }
 
+.table-border {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #7e5739;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .table {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
   background-color: #1a633a;
-  border-radius: 50%;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 100px rgba(0, 0, 0, 0.3);
-  border: 15px solid #7e5739;
-}
-
-.player-position {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-  height: 120px;
-}
-
-.north {
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.south {
-  bottom: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.east {
-  right: -50px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.west {
-  left: -50px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.player-avatar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  transition: all 0.3s ease;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.5);
   position: relative;
-}
-
-.player-avatar.active {
-  box-shadow: 0 0 15px #ffd54f;
-  transform: scale(1.05);
-}
-
-.player-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #444;
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin-bottom: 5px;
-  overflow: hidden;
+  align-items: center;
 }
 
-.player-icon svg {
-  width: 30px;
-  height: 30px;
-  stroke: white;
-}
-
-.player-name {
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-  max-width: 90px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.team-indicator {
+.table:before {
+  content: '';
   position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 5px;
-  border-radius: 2px;
-}
-
-.team-1 {
-  background-color: #42a5f5;
-  box-shadow: 0 0 10px rgba(66, 165, 245, 0.7);
-}
-
-.team-2 {
-  background-color: #ec407a;
-  box-shadow: 0 0 10px rgba(236, 64, 122, 0.7);
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
 }
 
 .table-center {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 100px;
   height: 140px;
   display: flex;
@@ -273,6 +192,7 @@ export default {
   align-items: center;
 }
 
+/* Styles des cartes */
 .center-card .card {
   width: 70px;
   height: 105px;
@@ -307,5 +227,145 @@ export default {
 
 .black-suit {
   color: #212121;
+}
+
+/* Positionnement des joueurs */
+.player {
+  position: absolute;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.player.active {
+  z-index: 10;
+}
+
+.player.active .player-avatar {
+  box-shadow: 0 0 15px #ffd54f;
+  transform: scale(1.1);
+}
+
+/* Positions spécifiques */
+.north {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.east {
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.south {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.west {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+/* Style des avatars de joueurs */
+.player-avatar {
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.player-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.player-icon svg {
+  width: 30px;
+  height: 30px;
+  stroke: white;
+}
+
+.player-name {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Styles des équipes */
+.team-1 {
+  border: 2px solid #42a5f5;
+  box-shadow: 0 0 10px rgba(66, 165, 245, 0.5);
+}
+
+.team-1 .player-icon {
+  background-color: rgba(66, 165, 245, 0.3);
+}
+
+.team-2 {
+  border: 2px solid #ec407a;
+  box-shadow: 0 0 10px rgba(236, 64, 122, 0.5);
+}
+
+.team-2 .player-icon {
+  background-color: rgba(236, 64, 122, 0.3);
+}
+
+/* Media queries pour la responsivité */
+@media (max-width: 600px) {
+  .table-container {
+    height: 400px;
+  }
+
+  .table-border {
+    width: 280px;
+    height: 280px;
+  }
+
+  .table {
+    width: 240px;
+    height: 240px;
+  }
+
+  .table:before {
+    width: 200px;
+    height: 200px;
+  }
+
+  .player {
+    width: 100px;
+  }
+
+  .player-avatar {
+    padding: 8px;
+  }
+
+  .player-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .player-name {
+    font-size: 12px;
+  }
 }
 </style>
