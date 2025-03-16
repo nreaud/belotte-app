@@ -28,7 +28,7 @@
             <div class="card-value">{{ trumpCard.value }}</div>
             <div class="card-suit" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</div>
           </div>
-          <div class="card-name">{{ getFullCardName(trumpCard) }}</div>
+
         </div>
       </div>
     </div>
