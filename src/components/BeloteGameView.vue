@@ -1,39 +1,51 @@
 <template>
-  <div class="game-view">
-    <div class="game-header">
-      <h1 class="game-title">Belote</h1>
-      <div class="score-display">
-        <div class="team-score team-1-score">
-          <div class="team-name">{{ teams.team1.name }}</div>
-          <div class="score-value">0</div>
-        </div>
-        <div class="team-score team-2-score">
-          <div class="team-name">{{ teams.team2.name }}</div>
-          <div class="score-value">0</div>
+  <div class="container-fluid bg-game py-3">
+    <div class="container">
+      <!-- Header Row -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="score-display d-flex justify-content-center">
+            <div class="team-score team-1-score me-3">
+              <div class="team-name">{{ teams.team1.name }}</div>
+              <div class="score-value">0</div>
+            </div>
+            <div class="team-score team-2-score">
+              <div class="team-name">{{ teams.team2.name }}</div>
+              <div class="score-value">0</div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="game-content">
-      <BeloteGameTable
-          :teams="teams"
-          :dealer="dealer"
-          :currentPlayer="currentPlayer"
-          :centerCard="trumpCardForTable"
-          :allPlayerCards="allPlayerCards"
-      />
+      <!-- Table Row -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <BeloteGameTable
+              :teams="teams"
+              :dealer="dealer"
+              :currentPlayer="currentPlayer"
+              :centerCard="trumpCardForTable"
+              :allPlayerCards="allPlayerCards"
+          />
+        </div>
+      </div>
 
-      <BeloteBiddingPhase
-          v-if="gamePhase === 'bidding'"
-          :teams="teams"
-          :dealer="dealer"
-          :humanPlayerIndex="currentPlayer"
-          :playerCards="allPlayerCards[currentPlayer]"
-          :trumpCard="trumpCard"
-          @bidding-complete="onBiddingComplete"
-          @restart-bidding="onRestartBidding"
-          @switch-player="onSwitchPlayer"
-      />
+      <!-- Bidding Row -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <BeloteBiddingPhase
+              v-if="gamePhase === 'bidding'"
+              :teams="teams"
+              :dealer="dealer"
+              :humanPlayerIndex="currentPlayer"
+              :playerCards="allPlayerCards[currentPlayer]"
+              :trumpCard="trumpCard"
+              @bidding-complete="onBiddingComplete"
+              @restart-bidding="onRestartBidding"
+              @switch-player="onSwitchPlayer"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -98,6 +110,27 @@ export default {
         { name: this.teams.team1.player2, team: 1 },
         { name: this.teams.team2.player2, team: 2 }
       ]
+    }
+  },
+  mounted() {
+    // S'assurer que Bootstrap est chargé
+    if (typeof bootstrap === 'undefined') {
+      // Charger Bootstrap CSS si ce n'est pas déjà fait
+      if (!document.getElementById('bootstrap-css')) {
+        const link = document.createElement('link');
+        link.id = 'bootstrap-css';
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+        document.head.appendChild(link);
+      }
+
+      // Charger Bootstrap JS si ce n'est pas déjà fait
+      if (!document.getElementById('bootstrap-js')) {
+        const script = document.createElement('script');
+        script.id = 'bootstrap-js';
+        script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js';
+        document.body.appendChild(script);
+      }
     }
   },
   created() {
@@ -241,38 +274,14 @@ export default {
 </script>
 
 <style scoped>
-.game-view {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
-  color: white;
-  min-height: 100vh;
+<style scoped>
+  /* Couleur de fond personnalisée */
+.bg-game {
   background-color: #1a1a36;
-  position: relative;
+  min-height: 100vh;
 }
 
-.game-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.game-title {
-  margin: 0;
-  color: #ffd54f;
-  font-size: 32px;
-  text-shadow: 0 0 15px rgba(255, 213, 79, 0.6);
-}
-
-.score-display {
-  display: flex;
-  gap: 30px;
-}
-
+/* Styles pour les scores d'équipe */
 .team-score {
   min-width: 120px;
   text-align: center;
@@ -297,90 +306,25 @@ export default {
   font-size: 14px;
   margin-bottom: 5px;
   opacity: 0.9;
+  color: white;
 }
 
 .score-value {
   font-size: 24px;
   font-weight: bold;
+  color: white;
 }
 
-.game-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-/* Sur les écrans larges, afficher les composants côte à côte */
-@media (min-width: 992px) {
-  .game-content {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
-  }
-
-  /* Le BeloteGameTable est toujours à droite */
-  .game-content > *:first-child {
-    order: 2;
-    flex: 0 0 40%;
-    max-width: 40%;
-  }
-
-  /* Le BeloteBiddingPhase est toujours à gauche */
-  .game-content > *:nth-child(2) {
-    order: 1;
-    flex: 0 0 55%;
-    max-width: 55%;
-  }
-}
-
-/* Améliorations pour la responsivité mobile */
+/* Styles responsifs */
 @media (max-width: 768px) {
-  .game-view {
-    padding: 10px;
-  }
-
-  .game-header {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .game-title {
-    font-size: 28px;
-  }
-
-  .score-display {
-    width: 100%;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
   .team-score {
     min-width: unset;
     flex: 1;
-    padding: 8px;
-  }
-
-  .team-name {
-    font-size: 12px;
-  }
-
-  .score-value {
-    font-size: 20px;
+    max-width: 120px;
   }
 }
 
-/* Pour très petits écrans */
 @media (max-width: 480px) {
-  .game-view {
-    padding: 5px;
-  }
-
-  .game-title {
-    font-size: 24px;
-  }
-
   .team-score {
     padding: 6px;
   }
