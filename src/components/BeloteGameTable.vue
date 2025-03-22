@@ -332,29 +332,23 @@ export default {
   background-color: rgba(236, 64, 122, 0.3);
 }
 
-/* Media queries pour la responsivité */
-@media (max-width: 600px) {
+/* Media queries améliorés pour la responsivité */
+@media (max-width: 768px) {
   .table-container {
-    height: 400px;
+    max-width: 360px;
   }
 
-  .table-border {
-    width: 280px;
-    height: 280px;
+  .center-card .card {
+    width: 60px;
+    height: 90px;
   }
 
-  .table {
-    width: 240px;
-    height: 240px;
+  .card-value {
+    font-size: 24px;
   }
 
-  .table:before {
-    width: 200px;
-    height: 200px;
-  }
-
-  .player {
-    width: 100px;
+  .card-suit {
+    font-size: 32px;
   }
 
   .player-avatar {
@@ -364,10 +358,59 @@ export default {
   .player-icon {
     width: 40px;
     height: 40px;
+    margin-bottom: 5px;
   }
 
   .player-name {
     font-size: 12px;
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-container {
+    max-width: 280px;
+  }
+
+  .center-card .card {
+    width: 50px;
+    height: 75px;
+  }
+
+  .card-value {
+    font-size: 18px;
+    top: 3px;
+    left: 6px;
+  }
+
+  .card-suit {
+    font-size: 24px;
+    bottom: 3px;
+    right: 6px;
+  }
+
+  .player-avatar {
+    padding: 5px;
+    border-radius: 8px;
+  }
+
+  .player-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .player-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .player-name {
+    font-size: 10px;
+    max-width: 60px;
+  }
+
+  .player.active .player-avatar {
+    transform: scale(1.05);
   }
 }
 </style>

@@ -741,4 +741,193 @@ export default {
 .log-action {
   color: #e0e0e0;
 }
+
+/* Ajout des styles responsives pour mobile */
+@media (max-width: 768px) {
+  .bidding-phase {
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .phase-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .bidding-info {
+    padding: 8px;
+    margin-bottom: 15px;
+  }
+
+  .round-label, .dealer-label {
+    font-size: 12px;
+  }
+
+  .round-value, .dealer-value {
+    font-size: 12px;
+  }
+
+  .trump-card-container {
+    padding: 10px;
+    margin: 15px 0;
+  }
+
+  .trump-card-label {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .card {
+    width: 90px;
+    height: 135px;
+  }
+
+  .card-center {
+    font-size: 36px;
+  }
+
+  .card-value {
+    font-size: 14px;
+  }
+
+  .card-suit {
+    font-size: 14px;
+  }
+
+  .player-hand {
+    padding: 15px 20px 20px 20px;
+    margin: 15px 0 30px 0;
+    min-height: 160px;
+  }
+
+  .hand-label {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .hand-cards {
+    height: 120px;
+  }
+
+  .mini-card {
+    width: 60px;
+    height: 90px;
+  }
+
+  .mini-card .card-center {
+    font-size: 28px;
+  }
+
+  .mini-card .card-value {
+    font-size: 12px;
+  }
+
+  .mini-card .card-suit {
+    font-size: 12px;
+  }
+
+  .hand-card:hover {
+    transform: translateY(-20px) scale(1.05);
+  }
+
+  .action-message {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .action-buttons {
+    gap: 10px;
+  }
+
+  .action-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .suit-option {
+    width: 40px;
+    height: 40px;
+  }
+
+  .suit-symbol {
+    font-size: 24px;
+  }
+
+  .action-log {
+    padding: 10px;
+    max-height: 120px;
+  }
+
+  .log-entry {
+    font-size: 12px;
+  }
+}
+
+/* Styles pour très petits écrans */
+@media (max-width: 480px) {
+  .bidding-phase {
+    padding: 10px;
+  }
+
+  .card {
+    width: 70px;
+    height: 105px;
+  }
+
+  .card-center {
+    font-size: 28px;
+  }
+
+  .card-value {
+    font-size: 12px;
+  }
+
+  .card-suit {
+    font-size: 12px;
+  }
+
+  .mini-card {
+    width: 50px;
+    height: 75px;
+  }
+
+  .mini-card .card-center {
+    font-size: 22px;
+  }
+
+  .mini-card .card-value,
+  .mini-card .card-suit {
+    font-size: 10px;
+  }
+
+  .action-button {
+    padding: 8px 15px;
+    font-size: 12px;
+  }
+
+  .selected-suit {
+    font-size: 16px;
+  }
+
+  .suit-option {
+    width: 36px;
+    height: 36px;
+  }
+
+  .suit-symbol {
+    font-size: 20px;
+  }
+
+  /* Améliorer la disposition des cartes en main pour petits écrans */
+  .hand-card {
+    /* Ajuster le positionnement pour mieux voir les cartes sur petits écrans */
+    transform: rotate(calc((var(--index) - 2) * 5deg))
+    translateY(calc((var(--index) - 2) * -5px));
+  }
+
+  /* Ajuster l'écartement des cartes */
+  .hand-cards {
+    height: 100px;
+  }
+}
 </style>

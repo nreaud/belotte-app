@@ -326,51 +326,98 @@ export default {
   color: #e0e0e0;
 }
 
-.current-player-info {
-  font-size: 16px;
-  color: #e0e0e0;
-}
-
 .current-player-name {
   font-weight: bold;
   color: #ffd54f;
 }
 
 /* Sur les écrans larges, afficher les composants côte à côte */
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
   .game-content {
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 30px;
+    gap: 20px;
   }
 
-  /* Limiter la taille des composants pour éviter tout chevauchement */
-  .game-content > *:not(.player-controls) {
-    flex: 0 0 48%; /* Chaque composant prend 48% de la largeur */
-    max-width: 48%;
+  /* Le BeloteGameTable est toujours à droite */
+  .game-content > *:first-child {
+    order: 2;
+    flex: 0 0 40%;
+    max-width: 40%;
   }
 
-  .player-controls {
+  /* Le BeloteBiddingPhase est toujours à gauche */
+  .game-content > *:nth-child(2) {
+    order: 1;
+    flex: 0 0 55%;
+    max-width: 55%;
+  }
+
+  /* L'info du joueur est en bas */
+  .current-player-info {
+    order: 3;
     flex: 0 0 100%;
-    flex-direction: row;
-    justify-content: space-between;
   }
 }
 
+/* Améliorations pour la responsivité mobile */
 @media (max-width: 768px) {
+  .game-view {
+    padding: 10px;
+  }
+
   .game-header {
     flex-direction: column;
     gap: 15px;
   }
 
+  .game-title {
+    font-size: 28px;
+  }
+
   .score-display {
     width: 100%;
+    justify-content: space-between;
+    gap: 10px;
   }
 
   .team-score {
+    min-width: unset;
     flex: 1;
+    padding: 8px;
+  }
+
+  .team-name {
+    font-size: 12px;
+  }
+
+  .score-value {
+    font-size: 20px;
+  }
+
+  .current-player-info {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* Pour très petits écrans */
+@media (max-width: 480px) {
+  .game-view {
+    padding: 5px;
+  }
+
+  .game-title {
+    font-size: 24px;
+  }
+
+  .team-score {
+    padding: 6px;
+  }
+
+  .score-value {
+    font-size: 16px;
   }
 }
 </style>

@@ -7,7 +7,7 @@
           <div class="card card-purple"><span>A</span><span class="symbol">♦</span></div>
           <div class="card card-pink"><span>A</span><span class="symbol">♥</span></div>
         </div>
-        <h1 class="logo-text">Belotte</h1>
+        <h1 class="logo-text">Belote</h1>
       </div>
     </div>
 
@@ -548,5 +548,193 @@ input:focus {
   transform: rotate(-25deg);
   border: 2px solid #7e57c2;
   box-shadow: 0 0 15px rgba(126, 87, 194, 0.5);
+}
+
+/* Styles responsives pour mobile */
+@media (max-width: 768px) {
+  .belote-setup {
+    padding: 15px;
+  }
+
+  .logo-container {
+    margin-bottom: 25px;
+  }
+
+  .card-container {
+    transform: translateY(20px);
+  }
+
+  .logo .card {
+    width: 45px;
+    height: 68px;
+    margin: 0 -10px;
+  }
+
+  .logo .card span {
+    font-size: 18px;
+  }
+
+  .logo .card .symbol {
+    font-size: 16px;
+  }
+
+  .logo-text {
+    font-size: 40px;
+  }
+
+  .teams-container {
+    gap: 20px;
+    margin-bottom: 25px;
+  }
+
+  .team-card {
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .input-group {
+    margin-bottom: 10px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  input {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .players {
+    margin-top: 15px;
+  }
+
+  .player-row {
+    margin-bottom: 10px;
+  }
+
+  .player-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+  }
+
+  .player-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .start-button {
+    padding: 12px 25px;
+    font-size: 16px;
+  }
+
+  /* Ajuster ou masquer les cartes décoratives sur mobile */
+  .decoration-card {
+    width: 60px;
+    height: 90px;
+  }
+
+  .decoration-card .card-content {
+    font-size: 24px;
+  }
+
+  .decoration-card .card-symbol {
+    font-size: 30px;
+  }
+
+  /* Repositionner les cartes pour éviter qu'elles ne gênent le contenu */
+  .card-1 {
+    top: 2%;
+    right: 2%;
+  }
+
+  .card-2 {
+    bottom: 5%;
+    left: 2%;
+  }
+
+  .card-3 {
+    display: none; /* Masquer la troisième carte sur mobile */
+  }
+}
+
+/* Styles pour très petits écrans */
+@media (max-width: 480px) {
+  .belote-setup {
+    padding: 10px;
+  }
+
+  .logo-container {
+    margin-bottom: 20px;
+  }
+
+  .logo .card {
+    width: 40px;
+    height: 60px;
+    margin: 0 -8px;
+  }
+
+  .logo .card span {
+    font-size: 16px;
+  }
+
+  .logo .card .symbol {
+    font-size: 14px;
+  }
+
+  .logo-text {
+    font-size: 30px;
+  }
+
+  .team-card {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  label {
+    font-size: 12px;
+  }
+
+  input {
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+
+  .player-icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+  }
+
+  .player-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .start-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  /* Réduire encore la taille des cartes ou les masquer davantage */
+  .decoration-card {
+    width: 50px;
+    height: 75px;
+    opacity: 0.1; /* Réduire l'opacité pour moins distraire */
+  }
+
+  .card-2 {
+    display: none; /* Masquer une autre carte sur très petits écrans */
+  }
 }
 </style>
