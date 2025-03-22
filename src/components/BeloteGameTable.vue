@@ -25,6 +25,18 @@
 
       <!-- Joueurs positionnés autour de la table -->
       <div class="player north" :class="{'active': currentPlayer === playerPositions.north}">
+        <!-- Indicateur de distributeur -->
+        <div v-if="dealer === playerPositions.north" class="player-indicator-wrapper">
+          <div class="dealer-indicator">
+            <span class="dealer-icon">D</span>
+          </div>
+        </div>
+        <!-- Indicateur de tour de prise -->
+        <div v-if="currentPlayer === playerPositions.north" class="player-indicator-wrapper turn-wrapper">
+          <div class="turn-indicator">
+            <span class="turn-icon">?</span>
+          </div>
+        </div>
         <div class="player-avatar" :class="getTeamClass(playerPositions.north)">
           <div class="player-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -37,6 +49,18 @@
       </div>
 
       <div class="player east" :class="{'active': currentPlayer === playerPositions.east}">
+        <!-- Indicateur de distributeur -->
+        <div v-if="dealer === playerPositions.east" class="player-indicator-wrapper">
+          <div class="dealer-indicator">
+            <span class="dealer-icon">D</span>
+          </div>
+        </div>
+        <!-- Indicateur de tour de prise -->
+        <div v-if="currentPlayer === playerPositions.east" class="player-indicator-wrapper turn-wrapper">
+          <div class="turn-indicator">
+            <span class="turn-icon">?</span>
+          </div>
+        </div>
         <div class="player-avatar" :class="getTeamClass(playerPositions.east)">
           <div class="player-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -49,6 +73,18 @@
       </div>
 
       <div class="player south" :class="{'active': currentPlayer === playerPositions.south}">
+        <!-- Indicateur de distributeur -->
+        <div v-if="dealer === playerPositions.south" class="player-indicator-wrapper">
+          <div class="dealer-indicator">
+            <span class="dealer-icon">D</span>
+          </div>
+        </div>
+        <!-- Indicateur de tour de prise -->
+        <div v-if="currentPlayer === playerPositions.south" class="player-indicator-wrapper turn-wrapper">
+          <div class="turn-indicator">
+            <span class="turn-icon">?</span>
+          </div>
+        </div>
         <div class="player-avatar" :class="getTeamClass(playerPositions.south)">
           <div class="player-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -61,6 +97,18 @@
       </div>
 
       <div class="player west" :class="{'active': currentPlayer === playerPositions.west}">
+        <!-- Indicateur de distributeur -->
+        <div v-if="dealer === playerPositions.west" class="player-indicator-wrapper">
+          <div class="dealer-indicator">
+            <span class="dealer-icon">D</span>
+          </div>
+        </div>
+        <!-- Indicateur de tour de prise -->
+        <div v-if="currentPlayer === playerPositions.west" class="player-indicator-wrapper turn-wrapper">
+          <div class="turn-indicator">
+            <span class="turn-icon">?</span>
+          </div>
+        </div>
         <div class="player-avatar" :class="getTeamClass(playerPositions.west)">
           <div class="player-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -376,6 +424,79 @@ export default {
   background-color: rgba(236, 64, 122, 0.3);
 }
 
+/* Nouveaux styles pour les indicateurs */
+.player-indicator-wrapper {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.player-indicator-wrapper {
+  position: absolute;
+  z-index: 20;
+}
+
+.north .player-indicator-wrapper {
+  top: 50%;
+  right: -35px;
+  left: auto;
+  transform: translateY(-50%);
+}
+
+.south .player-indicator-wrapper {
+  bottom: 50%;
+  right: -35px;
+  left: auto;
+  transform: translateY(50%);
+}
+
+.east .player-indicator-wrapper {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.west .player-indicator-wrapper {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dealer-indicator, .turn-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin: 0 5px;
+
+}
+
+.dealer-indicator {
+  background: #ff9800;
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.7);
+}
+
+.turn-indicator {
+  background: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.7);
+}
+
+.turn-wrapper {
+  margin-top: 2px; /* Séparation pour éviter la superposition avec l'indicateur de dealer */
+}
+
+.dealer-icon, .turn-icon {
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+
+
 /* Media queries améliorés pour la responsivité */
 @media (max-width: 768px) {
   .table-container {
@@ -418,6 +539,15 @@ export default {
     font-size: 12px;
     max-width: 80px;
   }
+
+  .dealer-indicator, .turn-indicator {
+    width: 24px;
+    height: 24px;
+  }
+
+  .dealer-icon, .turn-icon {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -445,29 +575,38 @@ export default {
   .table-center {
     width: 100px;
   }
-}
 
-.player-avatar {
-  padding: 5px;
-  border-radius: 8px;
-}
+  .player-avatar {
+    padding: 5px;
+    border-radius: 8px;
+  }
 
-.player-icon {
-  width: 32px;
-  height: 32px;
-}
+  .player-icon {
+    width: 32px;
+    height: 32px;
+  }
 
-.player-icon svg {
-  width: 20px;
-  height: 20px;
-}
+  .player-icon svg {
+    width: 20px;
+    height: 20px;
+  }
 
-.player-name {
-  font-size: 10px;
-  max-width: 60px;
-}
+  .player-name {
+    font-size: 10px;
+    max-width: 60px;
+  }
 
-.player.active .player-avatar {
-  transform: scale(1.05);
+  .player.active .player-avatar {
+    transform: scale(1.05);
+  }
+
+  .dealer-indicator, .turn-indicator {
+    width: 20px;
+    height: 20px;
+  }
+
+  .dealer-icon, .turn-icon {
+    font-size: 12px;
+  }
 }
 </style>
