@@ -152,7 +152,7 @@ export default {
   width: 100%;
   height: 0;
   padding-bottom: 100%; /* Crée un rapport d'aspect carré */
-  max-width: 450px;
+  max-width: 600px; /* Augmentation de la taille maximale */
   margin: 0 auto;
 }
 
@@ -172,8 +172,8 @@ export default {
 }
 
 .table {
-  width: 90%;
-  height: 90%;
+  width: 95%;
+  height: 95%;
   border-radius: 50%;
   background-color: #1a633a;
   box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.5);
@@ -194,17 +194,20 @@ export default {
 
 .table-center {
   position: absolute;
-  width: 100px;
-  height: 140px;
+  width: 180px;
+  height: 180px;
   display: flex;
   justify-content: center;
   align-items: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Styles des cartes */
 .center-card .card {
-  width: 120px;
-  height: 180px;
+  width: 80px;   /* Réduction de la taille de la carte */
+  height: 120px; /* Réduction de la taille de la carte */
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
@@ -248,7 +251,7 @@ export default {
 }
 
 .card-center {
-  font-size: 48px;
+  font-size: 32px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -256,12 +259,12 @@ export default {
 }
 
 .card-value {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
 }
 
 .card-suit {
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .red-suit {
@@ -376,24 +379,29 @@ export default {
 /* Media queries améliorés pour la responsivité */
 @media (max-width: 768px) {
   .table-container {
-    max-width: 360px;
+    max-width: 480px;
   }
 
   .center-card .card {
-    width: 90px;
-    height: 135px;
+    width: 70px;
+    height: 105px;
   }
 
   .card-center {
-    font-size: 36px;
+    font-size: 28px;
   }
 
   .card-value {
-    font-size: 16px;
+    font-size: 12px;
   }
 
   .card-suit {
-    font-size: 16px;
+    font-size: 12px;
+  }
+
+  .table-center {
+    width: 150px;
+    height: 150px;
   }
 
   .player-avatar {
@@ -414,48 +422,52 @@ export default {
 
 @media (max-width: 480px) {
   .table-container {
-    max-width: 280px;
+    max-width: 320px;
   }
 
   .center-card .card {
-    width: 70px;
-    height: 105px;
+    width: 60px;
+    height: 90px;
   }
 
   .card-center {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .card-value {
-    font-size: 14px;
+    font-size: 10px;
   }
 
   .card-suit {
-    font-size: 14px;
-  }
-
-  .player-avatar {
-    padding: 5px;
-    border-radius: 8px;
-  }
-
-  .player-icon {
-    width: 32px;
-    height: 32px;
-  }
-
-  .player-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .player-name {
     font-size: 10px;
-    max-width: 60px;
   }
 
-  .player.active .player-avatar {
-    transform: scale(1.05);
+  .table-center {
+    width: 100px;
   }
+}
+
+.player-avatar {
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.player-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.player-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.player-name {
+  font-size: 10px;
+  max-width: 60px;
+}
+
+.player.active .player-avatar {
+  transform: scale(1.05);
 }
 </style>
