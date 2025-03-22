@@ -7,9 +7,16 @@
           <!-- Centre de la table -->
           <div class="table-center">
             <div v-if="centerCard" class="center-card">
-              <div class="card">
-                <span class="card-value">{{ centerCard.value }}</span>
-                <span class="card-suit" :class="getSuitClass(centerCard.suit)">{{ getSuitSymbol(centerCard.suit) }}</span>
+              <div class="card" :class="getSuitClass(centerCard.suit)">
+                <div class="card-corner top-left">
+                  <div class="card-value">{{ centerCard.value }}</div>
+                  <div class="card-suit" :class="getSuitClass(centerCard.suit)">{{ getSuitSymbol(centerCard.suit) }}</div>
+                </div>
+                <div class="card-center" :class="getSuitClass(centerCard.suit)">{{ getSuitSymbol(centerCard.suit) }}</div>
+                <div class="card-corner bottom-right">
+                  <div class="card-value">{{ centerCard.value }}</div>
+                  <div class="card-suit" :class="getSuitClass(centerCard.suit)">{{ getSuitSymbol(centerCard.suit) }}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -196,31 +203,65 @@ export default {
 
 /* Styles des cartes */
 .center-card .card {
-  width: 70px;
-  height: 105px;
+  width: 120px;
+  height: 180px;
   background-color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.center-card .card:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 50%);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.card-corner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-left {
+  top: 5px;
+  left: 5px;
+}
+
+.bottom-right {
+  bottom: 5px;
+  right: 5px;
+  transform: rotate(180deg);
+}
+
+.card-center {
+  font-size: 48px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .card-value {
-  font-size: 30px;
+  font-size: 18px;
   font-weight: bold;
-  position: absolute;
-  top: 5px;
-  left: 10px;
 }
 
 .card-suit {
-  font-size: 40px;
-  position: absolute;
-  bottom: 5px;
-  right: 10px;
+  font-size: 18px;
 }
 
 .red-suit {
@@ -339,16 +380,20 @@ export default {
   }
 
   .center-card .card {
-    width: 60px;
-    height: 90px;
+    width: 90px;
+    height: 135px;
+  }
+
+  .card-center {
+    font-size: 36px;
   }
 
   .card-value {
-    font-size: 24px;
+    font-size: 16px;
   }
 
   .card-suit {
-    font-size: 32px;
+    font-size: 16px;
   }
 
   .player-avatar {
@@ -373,20 +418,20 @@ export default {
   }
 
   .center-card .card {
-    width: 50px;
-    height: 75px;
+    width: 70px;
+    height: 105px;
+  }
+
+  .card-center {
+    font-size: 28px;
   }
 
   .card-value {
-    font-size: 18px;
-    top: 3px;
-    left: 6px;
+    font-size: 14px;
   }
 
   .card-suit {
-    font-size: 24px;
-    bottom: 3px;
-    right: 6px;
+    font-size: 14px;
   }
 
   .player-avatar {

@@ -14,23 +14,7 @@
       </div>
     </div>
 
-    <!-- carte d'atout -->
-    <div class="trump-card-container">
-      <div class="trump-card-label">Carte d'atout potentiel:</div>
-      <div class="trump-card">
-        <div class="card" :class="getSuitClass(trumpCard.suit)">
-          <div class="card-corner top-left">
-            <div class="card-value">{{ trumpCard.value }}</div>
-            <div class="card-suit" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</div>
-          </div>
-          <div class="card-center" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</div>
-          <div class="card-corner bottom-right">
-            <div class="card-value">{{ trumpCard.value }}</div>
-            <div class="card-suit" :class="getSuitClass(trumpCard.suit)">{{ getSuitSymbol(trumpCard.suit) }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- La carte d'atout a été déplacée vers le composant GameTable -->
 
     <div class="current-player-action">
       <div class="action-message">C'est à {{ players[currentPlayerIndex].name }} de jouer</div>
@@ -120,6 +104,17 @@
 <script>
 export default {
   name: 'BeloteBiddingPhase',
+
+  data() {
+    return {
+      biddingRound: 1,
+      currentPlayerIndex: 0, // L'index du joueur actuel
+      selectedSuit: null,
+      actionLogs: [],
+      suits: ['hearts', 'diamonds', 'clubs', 'spades'],
+      playerHand: [] // Copie locale de la main du joueur
+    }
+  },
   props: {
     teams: {
       type: Object,
@@ -136,20 +131,10 @@ export default {
     playerCards: {
       type: Array,
       default: () => [] // Main du joueur actuel
-    }
-  },
-  data() {
-    return {
-      biddingRound: 1,
-      currentPlayerIndex: 0, // L'index du joueur actuel
-      trumpCard: {
-        value: '7',
-        suit: 'hearts'
-      },
-      selectedSuit: null,
-      actionLogs: [],
-      suits: ['hearts', 'diamonds', 'clubs', 'spades'],
-      playerHand: [] // Copie locale de la main du joueur
+    },
+    trumpCard: {
+      type: Object,
+      required: true // Carte d'atout potentielle déplacée en prop
     }
   },
   computed: {
@@ -197,19 +182,6 @@ export default {
   },
   methods: {
     dealCards() {
-      // Générer une carte d'atout potentielle
-      const values = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-      const suits = ['hearts', 'diamonds', 'clubs', 'spades']
-
-      // Choisir une carte aléatoire comme atout potentiel
-      const randomValue = values[Math.floor(Math.random() * values.length)]
-      const randomSuit = suits[Math.floor(Math.random() * suits.length)]
-
-      this.trumpCard = {
-        value: randomValue,
-        suit: randomSuit
-      }
-
       // Réinitialiser les données de la phase de prise
       this.biddingRound = 1
       this.actionLogs = []

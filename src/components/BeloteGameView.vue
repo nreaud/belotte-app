@@ -29,6 +29,7 @@
           :dealer="dealer"
           :humanPlayerIndex="currentPlayer"
           :playerCards="allPlayerCards[currentPlayer]"
+          :trumpCard="trumpCard"
           @bidding-complete="onBiddingComplete"
           @restart-bidding="onRestartBidding"
           @switch-player="onSwitchPlayer"
