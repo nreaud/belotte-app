@@ -34,10 +34,6 @@
           @restart-bidding="onRestartBidding"
           @switch-player="onSwitchPlayer"
       />
-
-      <div class="current-player-info">
-        Joueur actuel: <span class="current-player-name">{{ players[currentPlayer].name }}</span>
-      </div>
     </div>
   </div>
 </template>
@@ -315,23 +311,6 @@ export default {
   gap: 20px;
 }
 
-.current-player-info {
-  margin-top: 20px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 15px;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  font-size: 16px;
-  color: #e0e0e0;
-}
-
-.current-player-name {
-  font-weight: bold;
-  color: #ffd54f;
-}
-
 /* Sur les écrans larges, afficher les composants côte à côte */
 @media (min-width: 992px) {
   .game-content {
@@ -353,12 +332,6 @@ export default {
     order: 1;
     flex: 0 0 55%;
     max-width: 55%;
-  }
-
-  /* L'info du joueur est en bas */
-  .current-player-info {
-    order: 3;
-    flex: 0 0 100%;
   }
 }
 
@@ -395,11 +368,6 @@ export default {
 
   .score-value {
     font-size: 20px;
-  }
-
-  .current-player-info {
-    font-size: 14px;
-    padding: 10px;
   }
 }
 

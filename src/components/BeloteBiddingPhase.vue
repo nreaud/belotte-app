@@ -1,27 +1,10 @@
 <template>
   <div class="bidding-phase">
-    <h2 class="phase-title">Phase de Prise</h2>
-
-    <div class="bidding-info">
-      <div class="round-info">
-        <span class="round-label">Tour:</span>
-        <span class="round-value">{{ biddingRound === 1 ? 'Premier' : 'Second' }}</span>
-      </div>
-
-      <div class="dealer-info">
-        <span class="dealer-label">Distributeur:</span>
-        <span class="dealer-value">{{ players[dealer].name }}</span>
-      </div>
-    </div>
-
-    <!-- La carte d'atout a été déplacée vers le composant GameTable -->
-
     <div class="current-player-action">
       <div class="action-message">C'est à {{ players[currentPlayerIndex].name }} de jouer</div>
 
       <!-- Affichage de la main du joueur actuel -->
       <div class="player-hand" v-if="playerHand.length > 0">
-        <div class="hand-label">Main de {{ players[currentPlayerIndex].name }}:</div>
         <div class="hand-cards">
           <div
               v-for="(card, index) in playerHand"
@@ -84,37 +67,12 @@
         </div>
       </div>
     </div>
-
-    <div class="action-log">
-      <div class="log-title">Actions:</div>
-      <div class="log-entries">
-        <div
-            v-for="(log, index) in actionLogs"
-            :key="index"
-            class="log-entry"
-        >
-          <span class="log-player" :class="getTeamClass(log.playerIndex)">{{ players[log.playerIndex].name }}:</span>
-          <span class="log-action">{{ log.action }}</span>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'BeloteBiddingPhase',
-
-  data() {
-    return {
-      biddingRound: 1,
-      currentPlayerIndex: 0, // L'index du joueur actuel
-      selectedSuit: null,
-      actionLogs: [],
-      suits: ['hearts', 'diamonds', 'clubs', 'spades'],
-      playerHand: [] // Copie locale de la main du joueur
-    }
-  },
   props: {
     teams: {
       type: Object,
@@ -135,6 +93,15 @@ export default {
     trumpCard: {
       type: Object,
       required: true // Carte d'atout potentielle déplacée en prop
+    }
+  },
+  data() {
+    return {
+      biddingRound: 1,
+      currentPlayerIndex: 0, // L'index du joueur actuel
+      selectedSuit: null,
+      suits: ['hearts', 'diamonds', 'clubs', 'spades'],
+      playerHand: [] // Copie locale de la main du joueur
     }
   },
   computed: {
@@ -159,9 +126,6 @@ export default {
     // Initialiser le joueur actuel à l'humanPlayerIndex passé en props
     this.currentPlayerIndex = this.humanPlayerIndex
 
-    // Générer une carte d'atout potentielle
-    this.dealCards()
-
     // Copier la main du joueur
     this.playerHand = [...this.playerCards]
   },
@@ -181,34 +145,6 @@ export default {
     }
   },
   methods: {
-    dealCards() {
-      // Réinitialiser les données de la phase de prise
-      this.biddingRound = 1
-      this.actionLogs = []
-      this.currentPlayerIndex = this.humanPlayerIndex
-    },
-    getFullCardName(card) {
-      // Retourne le nom complet de la carte (ex: "Valet de Pique")
-      const valueNames = {
-        '7': 'Sept',
-        '8': 'Huit',
-        '9': 'Neuf',
-        '10': 'Dix',
-        'J': 'Valet',
-        'Q': 'Dame',
-        'K': 'Roi',
-        'A': 'As'
-      }
-
-      const suitNames = {
-        'hearts': 'Cœur',
-        'diamonds': 'Carreau',
-        'clubs': 'Trèfle',
-        'spades': 'Pique'
-      }
-
-      return `${valueNames[card.value]} de ${suitNames[card.suit]}`
-    },
     selectSuit(suit) {
       // Ne peut pas sélectionner la même couleur que l'atout potentiel au 2ème tour
       if (this.biddingRound === 2 && suit !== this.trumpCard.suit) {
@@ -216,38 +152,21 @@ export default {
       }
     },
     takeAction(isTaking) {
-      let actionText = ''
-
       if (isTaking) {
         // Le joueur prend
         if (this.biddingRound === 1) {
-          actionText = `Prend à ${this.getSuitSymbol(this.trumpCard.suit)}`
-          this.logAction(this.currentPlayerIndex, actionText)
           this.endBidding(this.currentPlayerIndex, this.trumpCard.suit)
         } else {
           // Second tour
           if (this.selectedSuit) {
-            actionText = `Prend à ${this.getSuitSymbol(this.selectedSuit)}`
-            this.logAction(this.currentPlayerIndex, actionText)
             this.endBidding(this.currentPlayerIndex, this.selectedSuit)
-          } else {
-            // Ne devrait pas se produire grâce au bouton désactivé
           }
         }
       } else {
         // Le joueur passe
-        actionText = "Passe"
-        this.logAction(this.currentPlayerIndex, actionText)
-
         // Passer au joueur suivant
         this.nextPlayer()
       }
-    },
-    logAction(playerIndex, action) {
-      this.actionLogs.push({
-        playerIndex,
-        action
-      })
     },
     nextPlayer() {
       // Passer au joueur suivant dans le sens des aiguilles d'une montre
@@ -284,10 +203,6 @@ export default {
       // Changer le distributeur
       const newDealer = (this.dealer + 1) % 4
       this.$emit('restart-bidding', { newDealer })
-
-      // Redistribuer les cartes
-      this.dealer = newDealer
-      this.dealCards()
     },
     getTeamClass(playerIndex) {
       const team = this.players[playerIndex].team
@@ -316,7 +231,7 @@ export default {
 .bidding-phase {
   width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 15px;
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 15px;
   color: white;
@@ -324,155 +239,22 @@ export default {
   box-sizing: border-box;
 }
 
-.phase-title {
-  text-align: center;
-  color: #ffd54f;
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 24px;
-  text-shadow: 0 0 10px rgba(255, 213, 79, 0.6);
-}
-
-.bidding-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding: 10px;
-  background-color: rgba(30, 30, 60, 0.5);
-  border-radius: 8px;
-}
-
-.round-info, .dealer-info {
-  display: flex;
-  align-items: center;
-}
-
-.round-label, .dealer-label {
-  margin-right: 8px;
-  color: #bdbdbd;
-}
-
-.round-value, .dealer-value {
-  font-weight: bold;
-  color: #ffd54f;
-}
-
-/* Styles pour la carte d'atout */
-.trump-card-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 0;
-  padding: 15px;
-  background-color: rgba(30, 30, 60, 0.5);
-  border-radius: 10px;
-  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4);
-}
-
-.trump-card-label {
-  text-align: center;
-  margin-bottom: 15px;
-  color: #ffd54f;
-  font-weight: bold;
-  font-size: 18px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.trump-card {
-  perspective: 1000px;
-}
-
-.card {
-  width: 120px;
-  height: 180px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.5s;
-}
-
-.card:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 50%);
-  border-radius: 10px;
-  pointer-events: none;
-}
-
-.card-corner {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.top-left {
-  top: 5px;
-  left: 5px;
-}
-
-.bottom-right {
-  bottom: 5px;
-  right: 5px;
-  transform: rotate(180deg);
-}
-
-.card-center {
-  font-size: 48px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.card-value {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.card-suit {
-  font-size: 18px;
-}
-
-.red-suit {
-  color: #d32f2f;
-}
-
-.black-suit {
-  color: #212121;
-}
-
 /* Styles pour la main du joueur */
 .player-hand {
-  margin: 20px 0 40px 0;
+  margin: 15px 0;
   position: relative;
   background-color: rgba(21, 87, 36, 0.5);
   border-radius: 15px;
-  padding: 20px 30px 30px 30px;
+  padding: 15px 20px 30px 20px;
   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
   border: 2px solid rgba(255, 213, 79, 0.3);
-  min-height: 200px;
-}
-
-.hand-label {
-  text-align: center;
-  margin-bottom: 15px;
-  color: #ffd54f;
-  font-weight: bold;
-  font-size: 18px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  min-height: 150px;
 }
 
 .hand-cards {
   display: flex;
   justify-content: center;
-  height: 160px;
+  height: 120px;
   position: relative;
   margin: 0 auto;
   width: 100%;
@@ -489,7 +271,7 @@ export default {
 }
 
 .hand-card:hover {
-  transform: translateY(-30px) scale(1.1);
+  transform: translateY(-20px) scale(1.1);
   z-index: 20;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
 }
@@ -560,13 +342,13 @@ export default {
 }
 
 .current-player-action {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .action-message {
   text-align: center;
   margin-bottom: 15px;
-  font-size: 18px;
+  font-size: 16px;
   color: #ffd54f;
   font-weight: bold;
 }
@@ -575,7 +357,7 @@ export default {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .action-button {
@@ -624,12 +406,12 @@ export default {
 }
 
 .suit-selection {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .suit-selector-label {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: #bdbdbd;
 }
 
@@ -671,114 +453,27 @@ export default {
   font-size: 30px;
 }
 
-.action-log {
-  padding: 15px;
-  background-color: rgba(30, 30, 60, 0.5);
-  border-radius: 8px;
-  max-height: 150px;
-  overflow-y: auto;
+.red-suit {
+  color: #d32f2f;
 }
 
-.log-title {
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #ffd54f;
+.black-suit {
+  color: #212121;
 }
 
-.log-entries {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.log-entry {
-  font-size: 14px;
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.log-player {
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.team-1 {
-  color: #42a5f5;
-}
-
-.team-2 {
-  color: #ec407a;
-}
-
-.log-action {
-  color: #e0e0e0;
-}
-
-/* Ajout des styles responsives pour mobile */
+/* Styles responsifs pour mobile */
 @media (max-width: 768px) {
   .bidding-phase {
-    padding: 15px;
-    border-radius: 10px;
-  }
-
-  .phase-title {
-    font-size: 20px;
-    margin-bottom: 15px;
-  }
-
-  .bidding-info {
-    padding: 8px;
-    margin-bottom: 15px;
-  }
-
-  .round-label, .dealer-label {
-    font-size: 12px;
-  }
-
-  .round-value, .dealer-value {
-    font-size: 12px;
-  }
-
-  .trump-card-container {
-    padding: 10px;
-    margin: 15px 0;
-  }
-
-  .trump-card-label {
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-
-  .card {
-    width: 90px;
-    height: 135px;
-  }
-
-  .card-center {
-    font-size: 36px;
-  }
-
-  .card-value {
-    font-size: 14px;
-  }
-
-  .card-suit {
-    font-size: 14px;
+    padding: 12px;
   }
 
   .player-hand {
-    padding: 15px 20px 20px 20px;
-    margin: 15px 0 30px 0;
-    min-height: 160px;
-  }
-
-  .hand-label {
-    font-size: 14px;
-    margin-bottom: 10px;
+    padding: 10px 15px 25px 15px;
+    min-height: 130px;
   }
 
   .hand-cards {
-    height: 120px;
+    height: 100px;
   }
 
   .mini-card {
@@ -791,24 +486,11 @@ export default {
   }
 
   .mini-card .card-value {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .mini-card .card-suit {
     font-size: 12px;
-  }
-
-  .hand-card:hover {
-    transform: translateY(-20px) scale(1.05);
-  }
-
-  .action-message {
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-
-  .action-buttons {
-    gap: 10px;
   }
 
   .action-button {
@@ -824,38 +506,12 @@ export default {
   .suit-symbol {
     font-size: 24px;
   }
-
-  .action-log {
-    padding: 10px;
-    max-height: 120px;
-  }
-
-  .log-entry {
-    font-size: 12px;
-  }
 }
 
 /* Styles pour très petits écrans */
 @media (max-width: 480px) {
   .bidding-phase {
-    padding: 10px;
-  }
-
-  .card {
-    width: 70px;
-    height: 105px;
-  }
-
-  .card-center {
-    font-size: 28px;
-  }
-
-  .card-value {
-    font-size: 12px;
-  }
-
-  .card-suit {
-    font-size: 12px;
+    padding: 8px;
   }
 
   .mini-card {
@@ -873,12 +529,8 @@ export default {
   }
 
   .action-button {
-    padding: 8px 15px;
-    font-size: 12px;
-  }
-
-  .selected-suit {
-    font-size: 16px;
+    padding: 8px 16px;
+    font-size: 13px;
   }
 
   .suit-option {
@@ -892,14 +544,11 @@ export default {
 
   /* Améliorer la disposition des cartes en main pour petits écrans */
   .hand-card {
-    /* Ajuster le positionnement pour mieux voir les cartes sur petits écrans */
-    transform: rotate(calc((var(--index) - 2) * 5deg))
-    translateY(calc((var(--index) - 2) * -5px));
+    transform: translateY(calc(var(--index, 0) * 5px));
   }
 
-  /* Ajuster l'écartement des cartes */
   .hand-cards {
-    height: 100px;
+    height: 90px;
   }
 }
 </style>
